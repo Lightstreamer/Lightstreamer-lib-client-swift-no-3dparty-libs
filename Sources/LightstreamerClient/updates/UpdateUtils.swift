@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import Foundation
-import JSONPatch
 
 enum FieldValue: Equatable {
     case unchanged

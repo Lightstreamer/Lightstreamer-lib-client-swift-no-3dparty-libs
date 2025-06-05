@@ -15,8 +15,7 @@
  */
 import Foundation
 import XCTest
-import JSONPatch
-@testable import LightstreamerClient
+import LightstreamerClient
 
 final class ClientTests: XCTestCase {
     var client: LightstreamerClient!

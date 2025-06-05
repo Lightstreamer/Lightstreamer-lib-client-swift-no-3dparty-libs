@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import Foundation
-import Alamofire
+//import Alamofire
 
 typealias HTTPFactoryService = (NSRecursiveLock, String,
                                 String,
@@ -44,7 +44,7 @@ protocol LsHttpClient: AnyObject {
 
 class LsHttp: LsHttpClient {
     let lock: NSRecursiveLock
-    let request: DataStreamRequest
+//    let request: DataStreamRequest
     let assembler = LineAssembler()
     let onText: (LsHttp, String) -> Void
     let onError: (LsHttp, String) -> Void
@@ -70,10 +70,13 @@ class LsHttp: LsHttpClient {
                 streamLogger.debug("HTTP sending: \(url) \(String(reflecting: body)) \(headers)")
             }
         }
+        /*
         request = AF.streamRequest(url, method: .post, headers: HTTPHeaders(headers)) { urlRequest in
             urlRequest.httpBody = Data(body.utf8)
         }
         request.validate().responseStreamString(on: defaultQueue, stream: { [weak self] e in self?.onEvent(e) })
+        */
+        fatalError("HTTP not supported")
     }
     
     var disposed: Bool {
@@ -88,10 +91,11 @@ class LsHttp: LsHttpClient {
                 streamLogger.debug("HTTP disposing")
             }
             m_disposed = true
-            request.cancel()
+//            request.cancel()
         }
     }
     
+    /*
     private func onEvent(_ stream: DataStreamRequest.Stream<String, Never>) {
         synchronized {
             guard !m_disposed else {
@@ -129,6 +133,7 @@ class LsHttp: LsHttpClient {
             }
         }
     }
+    */
     
     private func synchronized<T>(block: () -> T) -> T {
         lock.lock()

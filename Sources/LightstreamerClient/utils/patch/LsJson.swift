@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 import Foundation
-import JSONPatch
+//import JSONPatch
 
 typealias LsJson = Any
 
-typealias LsJsonPatch = JSONPatch
+//typealias LsJsonPatch = JSONPatch
+typealias LsJsonPatch = String
 
 func newJson(_ str: String) throws -> LsJson {
     return try JSONSerialization.jsonObject(with: str.data(using: .utf8)!)
 }
 
 func applyPatch(_ json: LsJson, _ patch: LsJsonPatch) throws -> LsJson {
-    return try patch.apply(to: json, options: [.applyOnCopy])
+//    return try patch.apply(to: json, options: [.applyOnCopy])
+    fatalError("JSON Patch not supported")
 }
 
 func jsonToString(_ json: LsJson) -> String {
@@ -33,9 +35,11 @@ func jsonToString(_ json: LsJson) -> String {
 }
 
 func newJsonPatch(_ str: String) throws -> LsJsonPatch {
-    return try JSONPatch(data: str.data(using: .utf8)!)
+//    return try JSONPatch(data: str.data(using: .utf8)!)
+    fatalError("JSON Patch not supported")
 }
 
 func jsonPatchToString(_ patch: LsJsonPatch) -> String {
-    return String(decoding: try! patch.data(), as: UTF8.self)
+//    return String(decoding: try! patch.data(), as: UTF8.self)
+    fatalError("JSON Patch not supported")
 }

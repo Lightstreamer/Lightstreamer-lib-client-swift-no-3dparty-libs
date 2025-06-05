@@ -6,10 +6,10 @@ import PackageDescription
 let package = Package(
     name: "LightstreamerClient",
     platforms: [
-        .iOS(SupportedPlatform.IOSVersion.v12),
+        .iOS(SupportedPlatform.IOSVersion.v13),
         .macOS(SupportedPlatform.MacOSVersion.v10_15),
-        .watchOS(SupportedPlatform.WatchOSVersion.v5),
-        .tvOS(SupportedPlatform.TVOSVersion.v12)
+        .watchOS(SupportedPlatform.WatchOSVersion.v6),
+        .tvOS(SupportedPlatform.TVOSVersion.v13)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.

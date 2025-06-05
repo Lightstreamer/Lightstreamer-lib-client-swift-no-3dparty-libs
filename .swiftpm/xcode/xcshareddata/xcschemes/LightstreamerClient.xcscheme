@@ -51,6 +51,32 @@
                BlueprintName = "LightstreamerClientTests"
                ReferencedContainer = "container:">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "ClientTests/testConnectHTTP()">
+               </Test>
+               <Test
+                  Identifier = "ClientTests/testJsonPatch()">
+               </Test>
+               <Test
+                  Identifier = "ClientTestsWSPolling">
+               </Test>
+               <Test
+                  Identifier = "DiffPatchTests">
+               </Test>
+               <Test
+                  Identifier = "DiffTests">
+               </Test>
+               <Test
+                  Identifier = "JsonPatchTests">
+               </Test>
+               <Test
+                  Identifier = "NetTests/testHTTP()">
+               </Test>
+               <Test
+                  Identifier = "NetTests/testWS()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

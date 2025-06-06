@@ -44,7 +44,7 @@ protocol LsWebsocketClient: AnyObject {
 }
 
 /// Delegate for URLSession
-class LsWebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate {
+private class LsWebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate {
     private let lock = NSRecursiveLock()
     private weak var session: LsWebsocketSession?
     
@@ -62,11 +62,17 @@ class LsWebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate {
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didOpenWithProtocol protocol: String?) {
         guard let taskWrapper = getSession()?.getWrapper(webSocketTask) else { return }
+        if streamLogger.isDebugEnabled {
+            streamLogger.debug("WS event: open")
+        }
         taskWrapper.getDelegate()?.onTaskOpen()
     }
 
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         guard let taskWrapper = getSession()?.getWrapper(webSocketTask) else { return }
+        if streamLogger.isDebugEnabled {
+            streamLogger.debug("WS event: closed(\(closeCode) - \(String(describing: reason)))")
+        }
         taskWrapper.getDelegate()?.onTaskError("unexpected disconnection: \(closeCode) - \(String(describing: reason))")
     }
     
@@ -80,7 +86,7 @@ class LsWebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate {
 }
 
 /// Wrapper of URLSession
-class LsWebsocketSession: NSObject, URLSessionWebSocketDelegate {
+private class LsWebsocketSession: NSObject, URLSessionWebSocketDelegate {
     public static let shared = LsWebsocketSession()
     
     private let lock = NSRecursiveLock()
@@ -133,7 +139,7 @@ class LsWebsocketSession: NSObject, URLSessionWebSocketDelegate {
 }
 
 /// Wrapper of URLSessionWebSocketTask
-class LsWebsocketTask {
+private class LsWebsocketTask {
     private let lock = NSRecursiveLock()
     private let session: LsWebsocketSession
     private let task: URLSessionWebSocketTask
@@ -169,6 +175,9 @@ class LsWebsocketTask {
             case .success(let message):
                 switch message {
                 case .string(let chunk):
+                    if streamLogger.isDebugEnabled {
+                        streamLogger.debug("WS event: text(\(chunk))")
+                    }
                     for line in chunk.split(separator: "\r\n") {
                         self.getDelegate()?.onTaskText(String(line))
                     }
@@ -178,6 +187,9 @@ class LsWebsocketTask {
                     fatalError("Unexpect message type")
                 }
             case .failure(let error):
+                if streamLogger.isDebugEnabled {
+                    streamLogger.debug("WS event: error(\(error.localizedDescription))")
+                }
                 self.getDelegate()?.onTaskError(error.localizedDescription)
             }
             self.listen()
@@ -206,7 +218,7 @@ class LsWebsocketTask {
 }
 
 /// Delegate responsible for publishing events from LsWebsocketTask
-protocol LsWebSocketTaskDelegate: AnyObject {
+private protocol LsWebSocketTaskDelegate: AnyObject {
     func onTaskOpen()
     func onTaskText(_ text: String)
     func onTaskError(_ error: String)
@@ -214,7 +226,7 @@ protocol LsWebSocketTaskDelegate: AnyObject {
 
 class LsWebsocket: LsWebsocketClient, LsWebSocketTaskDelegate {
     let lock: NSRecursiveLock
-    let socket: LsWebsocketTask
+    private let socket: LsWebsocketTask
     let onOpen: (LsWebsocket) -> Void
     let onText: (LsWebsocket, String) -> Void
     let onError: (LsWebsocket, String) -> Void
